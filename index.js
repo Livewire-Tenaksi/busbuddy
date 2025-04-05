@@ -10,6 +10,23 @@ let app = express();
 app.use(express.json());
 app.use(cookieparser()); // ✅ Use before routes
 
+
+
+
+const path = require("path");
+
+// Serve static files from React app
+app.use(express.static(path.join(__dirname, "client", "dist")));
+
+// Catch-all route to serve React's index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+
+
+
+
+
 // ✅ CORRECT CORS SETUP
 const allowedOrigins = [
   "http://localhost:5173",
