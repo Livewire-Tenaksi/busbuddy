@@ -8,10 +8,13 @@ const busrouter = require("./module/bus.module");
 let app = express()
 
 app.use(express.json())
-const cors = require("cors");
+
+
+
 
 const allowedOrigins = [
-    "https://busbuddy-peach.vercel.app/"
+    "http://localhost:5173", // for local dev
+    "https://busbuddy-peach.vercel.app" // deployed frontend
 ];
 
 app.use(cors({
@@ -25,7 +28,7 @@ app.use(cors({
     credentials: true
 }));
 
-// This is critical for preflight requests
+// Handle preflight
 app.options("*", cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -36,6 +39,16 @@ app.options("*", cors({
     },
     credentials: true
 }));
+
+
+
+
+
+
+
+
+
+
 
 app.use(cookieparser());
 
