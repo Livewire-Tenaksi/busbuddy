@@ -11,7 +11,7 @@ app.use(express.json())
 const cors = require("cors");
 
 const allowedOrigins = [
-    "http://localhost:5173"
+    "https://busbuddy-peach.vercel.app/"
 ];
 
 app.use(cors({
