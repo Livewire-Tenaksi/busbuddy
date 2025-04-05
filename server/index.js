@@ -5,15 +5,12 @@ let cookieparser = require("cookie-parser");
 const authrouter = require("./module/auth.module");
 const busrouter = require("./module/bus.module");
 
-let app = express()
+let app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cookieparser()); // ✅ Use before routes
 
-
-
-
-
-
+// ✅ CORRECT CORS SETUP
 const allowedOrigins = [
   "http://localhost:5173",
   "https://busbuddy-peach.vercel.app"
@@ -32,33 +29,18 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// 🔥 Apply to all routes (including preflight)
+// ✅ This applies to all requests and OPTIONS preflight
 app.use(cors(corsOptions));
 
+// ✅ Manually handle OPTIONS to ensure all headers go out (some setups still fail without this)
+app.options("*", cors(corsOptions));
 
+// ✅ Now connect DB and add routes
+Connectdb();
 
+app.use("/auth", authrouter);
+app.use("/bus", busrouter);
 
-
-
-
-
-
-
-
-
-app.use(cookieparser());
-
-Connectdb()
-
-app.use("/auth",authrouter)
-
-app.use("/bus",busrouter)
-
-
-
-
-app.listen(4000,()=>{
-
-    console.log("server is running at : http://localhost:4000");
-    
-})
+app.listen(4000, () => {
+  console.log("server is running at : http://localhost:4000");
+});
